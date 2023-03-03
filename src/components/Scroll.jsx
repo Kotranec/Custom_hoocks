@@ -1,7 +1,21 @@
+import { useState } from "react";
 import {useScroll} from "../hooks/useScroll";
 
 export const Scroll = () => {
-    const {parentRef, childRef, todos} = useScroll();
+    const [todos, setTodos] = useState([]);
+    const [page, setPage] = useState(1);
+    const limit = 10;
+    
+    const {parentRef, childRef} = useScroll(limit, page, fetchTodos);
+
+    function fetchTodos(limitFetch, pageFetch) {
+        fetch(`https://jsonplaceholder.typicode.com/todos?_limit=${limitFetch}&_page=${pageFetch}`)
+            .then(response => response.json())
+            .then(json => {
+                setTodos(prev => [...prev, ...json]);
+                setPage(prev => prev + 1);
+            })
+    }
 
     return (
         <>

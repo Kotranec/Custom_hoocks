@@ -1,21 +1,9 @@
-import {useState, useEffect, useRef} from "react";
+import {useEffect, useRef} from "react";
 
-export const useScroll = () => {
-    const [todos, setTodos] = useState([]);
-    const [page, setPage] = useState(1);
+export const useScroll = (limit, page, callback) => {
     const parentRef = useRef();
     const childRef = useRef();
-    const observer = useRef();
-    const limit = 10;
-
-    function fetchTodos(page, limit) {
-        fetch(`https://jsonplaceholder.typicode.com/todos?_limit=${limit}&_page=${page}`)
-            .then(response => response.json())
-            .then(json => {
-                setTodos(prev => [...prev, ...json]);
-                setPage(prev => prev + 1);
-            })
-    }
+    const observer = useRef();    
 
     useEffect(() => {
         const options = {
@@ -25,7 +13,7 @@ export const useScroll = () => {
         }
         observer.current = new IntersectionObserver(([target]) => {
             if (target.isIntersecting) {
-                fetchTodos(page, limit);
+                setTimeout(() => callback(limit, page), 1000);
             }
         }, options)
 
@@ -36,5 +24,5 @@ export const useScroll = () => {
         };
     });
 
-    return {parentRef, childRef, todos};
+    return {parentRef, childRef};
 };

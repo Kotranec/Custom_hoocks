@@ -1,10 +1,10 @@
 # Custom_hooks
 
-## Task
+## Task:
 
 ```
-Implement custom:
-    hoocks useInput,
+Implement custom hoocks:
+    useInput,
     useHover,
     useScrol (with loading data into the list in parts)
 ```
